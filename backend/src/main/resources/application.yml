@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: gptsam
+  jpa:
+    database: MYSQL
+    show-sql: true  # SQL 쿼리 포맷팅 활성화
+    properties:
+      hibernate:
+        format-sql: true                       # SQL 쿼리 포맷팅 활성화
+        generate_statistics: true              # Hibernate Statics 활성화
+        create_empty_composites.enabled: true  # NPE 방지
+    hibernate:
+      ddl_auto: validate
+
+---
+
+spring:
+  config:
+    import: classpath:profiles/application-local.yml
+    activate:
+      on-profile: local
