@@ -1,6 +1,8 @@
 server:
-  port: ${SERVER_PORT_LOCAL}
-  base-url: ${SERVER_BASE_URL_LOCAL}
+  port: 8080
+  base-url: http://localhost:8080
+cors:
+  allowed-origins: http://localhost:3000
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
