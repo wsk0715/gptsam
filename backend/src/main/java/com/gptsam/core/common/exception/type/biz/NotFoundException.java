@@ -1,6 +1,6 @@
-package com.gptsam.core.exception.type.biz;
+package com.gptsam.core.common.exception.type.biz;
 
-import com.gptsam.core.exception.type.InternalServerException;
+import com.gptsam.core.common.exception.type.InternalServerException;
 
 /**
  * 404 Not Found

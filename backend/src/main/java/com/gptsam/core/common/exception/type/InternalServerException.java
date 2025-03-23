@@ -1,4 +1,4 @@
-package com.gptsam.core.exception.type;
+package com.gptsam.core.common.exception.type;
 
 /**
  * 500 Internal Server Error

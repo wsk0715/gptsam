@@ -1,11 +1,11 @@
-package com.gptsam.core.exception.handler;
+package com.gptsam.core.common.exception.handler;
 
+import com.gptsam.core.common.exception.type.InternalServerException;
+import com.gptsam.core.common.exception.type.biz.BadRequestException;
+import com.gptsam.core.common.exception.type.biz.ForbiddenException;
+import com.gptsam.core.common.exception.type.biz.NotFoundException;
+import com.gptsam.core.common.exception.type.biz.UnauthorizedException;
 import com.gptsam.core.common.response.ApiResponse;
-import com.gptsam.core.exception.type.InternalServerException;
-import com.gptsam.core.exception.type.biz.BadRequestException;
-import com.gptsam.core.exception.type.biz.ForbiddenException;
-import com.gptsam.core.exception.type.biz.NotFoundException;
-import com.gptsam.core.exception.type.biz.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
