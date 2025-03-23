@@ -1,9 +1,11 @@
 package com.gptsam.core.auth.controller;
 
+import com.gptsam.core.auth.annotation.LoginUser;
 import com.gptsam.core.auth.service.AuthService;
 import com.gptsam.core.common.response.ApiResponse;
 import com.gptsam.core.credential.dto.Credential;
 import com.gptsam.core.user.domain.User;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,15 @@ public class AuthController {
 		Credential credential = authService.setCredential(tUser, response);
 
 		return ResponseEntity.ok(ApiResponse.success(credential));
+	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<ApiResponse<Void>> logout(@Parameter(hidden = true) @LoginUser User loginUser,
+													HttpServletResponse response) {
+		// TODO: 로그아웃 시 액세스 토큰 블랙리스트 추가
+		authService.removeCredential(response);
+
+		return ResponseEntity.ok().build();
 	}
 
 }

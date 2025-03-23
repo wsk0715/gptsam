@@ -29,6 +29,11 @@ public class AuthService {
 		return credential;
 	}
 
+	public void removeCredential(HttpServletResponse response) {
+		headerCredentialManager.removeCredential(response);
+		cookieCredentialManager.removeCredential(response);
+	}
+
 	public String getCredential(HttpServletRequest request) {
 		String token = headerCredentialManager.getCredential(request);
 		tokenProvider.validateToken(token);
