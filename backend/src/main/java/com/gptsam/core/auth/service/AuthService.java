@@ -29,15 +29,21 @@ public class AuthService {
 		return credential;
 	}
 
+	public Credential refreshCredential(User loginUser, Credential credential, HttpServletResponse response) {
+		String accessToken = tokenProvider.refreshAccessToken(loginUser, credential.refreshToken());
+		Credential newCredential = Credential.of(accessToken);
+
+		headerCredentialManager.setCredential(newCredential, response);
+		return newCredential;
+	}
+
 	public void removeCredential(HttpServletResponse response) {
 		headerCredentialManager.removeCredential(response);
 		cookieCredentialManager.removeCredential(response);
 	}
 
 	public String getCredential(HttpServletRequest request) {
-		String token = headerCredentialManager.getCredential(request);
-		tokenProvider.validateToken(token);
-		return token;
+		return headerCredentialManager.getCredential(request);
 	}
 
 	public Long getUserIdFromToken(String token) {

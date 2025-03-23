@@ -3,6 +3,7 @@ package com.gptsam.core.credential.provider;
 import com.gptsam.core.common.exception.type.biz.UnauthorizedException;
 import com.gptsam.core.user.domain.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,7 +27,7 @@ public class JwtTokenProvider {
 	public String generateToken(User user) {
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + expirationMs);
-		
+
 		return Jwts.builder()
 				   .setSubject(String.valueOf(user.getId()))
 				   .claim("nickname", user.getNickname())
@@ -35,6 +36,11 @@ public class JwtTokenProvider {
 				   .setExpiration(expiryDate)
 				   .signWith(SignatureAlgorithm.HS256, jwtSecretKey.getBytes())
 				   .compact();
+	}
+
+	public String refreshAccessToken(User loginUser, String refreshToken) {
+		validateToken(refreshToken);
+		return generateToken(loginUser);
 	}
 
 	public String generateRefreshToken(Long userId) {
@@ -67,22 +73,32 @@ public class JwtTokenProvider {
 		}
 
 		try {
-			Jwts.parser()
-				.setSigningKey(jwtSecretKey.getBytes())
-				.parseClaimsJws(token);
+			getClaims(token);
+			checkExpiry(token);
 		} catch (JwtException | IllegalArgumentException e) {
 			throw new UnauthorizedException("유효하지 않은 토큰입니다.");
 		}
 	}
 
-	private Claims getClaims(String token) {
-		validateToken(token);
+	private void checkExpiry(String token) {
+		Date expiryDate = getClaims(token).getExpiration();
+		Date now = new Date();
 
+		// 토큰이 만료되었는지 확인
+		if (expiryDate.before(now)) {
+			throw new UnauthorizedException("만료된 토큰입니다.");
+		}
+	}
+
+	private Claims getClaims(String token) {
 		try {
 			return Jwts.parser()
 					   .setSigningKey(jwtSecretKey.getBytes())
 					   .parseClaimsJws(token)
 					   .getBody();
+		} catch (ExpiredJwtException e) {
+			// 토큰 만료 여부는 따로 처리
+			return e.getClaims();
 		} catch (JwtException | IllegalArgumentException e) {
 			throw new UnauthorizedException("유효하지 않은 토큰입니다.");
 		}

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,15 @@ public class AuthController {
 		Credential credential = authService.setCredential(tUser, response);
 
 		return ResponseEntity.ok(ApiResponse.success(credential));
+	}
+
+	@PostMapping("/login/refresh")
+	public ResponseEntity<ApiResponse<Credential>> refresh(@Parameter(hidden = true) @LoginUser User loginUser,
+														   @RequestBody Credential credential,
+														   HttpServletResponse response) {
+		Credential newCredential = authService.refreshCredential(loginUser, credential, response);
+
+		return ResponseEntity.ok(ApiResponse.success(newCredential));
 	}
 
 	@PostMapping("/logout")
