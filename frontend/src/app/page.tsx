@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { apiClient, ApiResponse } from './api/apiClient';
+import { apiClient } from './api/apiClient';
+import { ApiResponse } from './api/types/ApiResponse';
 
 export default function Home() {
 	const [data, setData] = useState<ApiResponse | null>(null);

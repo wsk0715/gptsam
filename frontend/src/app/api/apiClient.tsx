@@ -1,13 +1,7 @@
 'use client';
 
 import api from './axiosConfig';
-
-// 응답 body 타입 정의
-export type ApiResponse<T = null> = {
-	result: T;
-	message: string;
-	timestamp: string;
-};
+import { ApiResponse } from './types/ApiResponse';
 
 class ApiClient {
 	private readonly apiEndPoint = ''; // api 기본 엔드포인트
