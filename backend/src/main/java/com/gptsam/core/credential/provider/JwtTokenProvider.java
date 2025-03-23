@@ -55,6 +55,23 @@ public class JwtTokenProvider {
 				   .compact();
 	}
 
+	public String updateRefreshToken(String refreshToken) {
+		if (shouldUpdateRefreshToken(refreshToken)) {
+			return generateRefreshToken(getUserId(refreshToken));
+		}
+		return refreshToken;
+	}
+
+	private boolean shouldUpdateRefreshToken(String refreshToken) {
+		Date expiryDate = getClaims(refreshToken).getExpiration();
+		Date now = new Date();
+
+		long timeToExpiry = expiryDate.getTime() - now.getTime();
+
+		// 만료 시간의 20% 이하로 남았으면 갱신 필요
+		return timeToExpiry < (refreshExpirationMs * 0.2);
+	}
+
 	public long getUserId(String token) {
 		return Long.parseLong(getClaims(token).getSubject());
 	}

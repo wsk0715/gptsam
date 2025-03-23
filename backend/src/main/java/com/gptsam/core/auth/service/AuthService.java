@@ -30,11 +30,13 @@ public class AuthService {
 	}
 
 	public Credential refreshCredential(User loginUser, Credential credential, HttpServletResponse response) {
-		String accessToken = tokenProvider.refreshAccessToken(loginUser, credential.refreshToken());
-		Credential newCredential = Credential.of(accessToken);
+		String refreshToken = credential.refreshToken();
+		String accessToken = tokenProvider.refreshAccessToken(loginUser, refreshToken);
+		refreshToken = tokenProvider.updateRefreshToken(refreshToken);
 
-		headerCredentialManager.setCredential(newCredential, response);
-		return newCredential;
+		headerCredentialManager.setCredential(accessToken, response);
+		cookieCredentialManager.setCredential(refreshToken, response);
+		return Credential.of(accessToken, refreshToken);
 	}
 
 	public void removeCredential(HttpServletResponse response) {
