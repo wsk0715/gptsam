@@ -15,10 +15,7 @@ const api = axios.create({
 // 응답 인터셉터
 api.interceptors.response.use(
 	(response) => {
-		// 상태 코드가 200인 경우
-		if (response.status === 200) {
-			return response.data;
-		}
+		return response;
 	},
 	(err) => {
 		// 요청 설정 중 에러가 발생한 경우

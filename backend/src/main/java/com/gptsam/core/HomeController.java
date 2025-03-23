@@ -1,6 +1,6 @@
 package com.gptsam.core;
 
-import java.time.LocalDateTime;
+import com.gptsam.core.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
 	@GetMapping
-	public ResponseEntity<LocalDateTime> home() {
-		return ResponseEntity.ok(LocalDateTime.now());
+	public ResponseEntity<ApiResponse<Void>> home() {
+		return ResponseEntity.ok(ApiResponse.success());
 	}
 
 }

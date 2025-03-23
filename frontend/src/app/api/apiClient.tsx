@@ -1,17 +1,15 @@
 'use client';
 
 import api from './axiosConfig';
-
-// 응답 body 타입 정의
-export type ApiResponse<T = void> = T;
+import { ApiResponse } from './types/ApiResponse';
 
 class ApiClient {
 	private readonly apiEndPoint = ''; // api 기본 엔드포인트
 
 	// GET 요청
-	async get<T = void>(url: string) {
+	async get<T = null>(url: string) {
 		try {
-			const response = await api.get<T>(this.apiEndPoint + url);
+			const response = await api.get<ApiResponse<T>>(this.apiEndPoint + url);
 			return response.data;
 		} catch (err) {
 			if (err instanceof Error) {
