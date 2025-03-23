@@ -5,6 +5,7 @@ import com.gptsam.core.credential.manager.cookie.CookieCredentialManager;
 import com.gptsam.core.credential.manager.header.HeaderCredentialManager;
 import com.gptsam.core.credential.provider.JwtTokenProvider;
 import com.gptsam.core.user.domain.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,20 @@ public class AuthService {
 		headerCredentialManager.setCredential(credential, response);
 		cookieCredentialManager.setCredential(credential, response);
 		return credential;
+	}
+
+	public String getCredential(HttpServletRequest request) {
+		String token = headerCredentialManager.getCredential(request);
+		tokenProvider.validateToken(token);
+		return token;
+	}
+
+	public Long getUserIdFromToken(String token) {
+		return tokenProvider.getUserId(token);
+	}
+
+	public String getUserNicknameFromToken(String token) {
+		return tokenProvider.getNickname(token);
 	}
 
 }
