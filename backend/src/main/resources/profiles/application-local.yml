@@ -1,6 +1,5 @@
 server:
   port: 8080
-  base-url: http://localhost:8080
 cors:
   allowed-origins: http://localhost:3000
 spring:
@@ -12,8 +11,8 @@ spring:
 security:
   jwt:
     secret-key: ${SERVER_LOCAL_JWT_SECRET_KEY}
-    expiration-ms: 30000           # 30초; 1000 * 30
-    refresh-expiration-ms: 120000  # 2분; 1000 * 60 * 2
+    expiration-ms: 30_000           # 30초; 1000 * 30
+    refresh-expiration-ms: 120_000  # 2분; 1000 * 60 * 2
   cookie:
     max-age: 120         # 초 단위, 2분
     is-secure: false     # HTTPS 사용여부, 프로덕션 시 true

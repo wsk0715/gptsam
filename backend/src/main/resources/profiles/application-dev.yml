@@ -1,0 +1,20 @@
+server:
+  port: 8080
+cors:
+  allowed-origins: ${CLIENT_LOCAL_PC_1}
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL_DEV}
+    username: ${DB_USERNAME_DEV}
+    password: ${DB_PASSWORD_DEV}
+security:
+  jwt:
+    secret-key: ${SERVER_DEV_JWT_SECRET_KEY}
+    expiration-ms: 300_000            # 5분; 1000 * 60 * 5
+    refresh-expiration-ms: 1_800_000  # 30분; 1000 * 60 * 30
+  cookie:
+    max-age: 1_800       # 초 단위, 30분; 60 * 30
+    is-secure: false     # HTTPS 사용여부, 프로덕션 시 true
+    http-only: true
+    same-site: "Strict"  # [None | Lax | Strict]
