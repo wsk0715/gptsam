@@ -8,7 +8,7 @@ on:
 jobs:
   test-before-merge:
     env:
-      SPRING_PROFILES_ACTIVE: ${{ secrets.SPRING_PROFILES_ACTIVE }}
+      SPRING_PROFILES_ACTIVE: dev
       DB_URL_DEV: ${{ secrets.DB_URL_DEV }}
       DB_NAME_DEV: ${{ secrets.DB_NAME_DEV }}
       DB_USERNAME_DEV: ${{ secrets.DB_USERNAME_DEV }}
