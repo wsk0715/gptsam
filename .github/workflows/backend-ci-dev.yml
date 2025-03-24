@@ -1,0 +1,58 @@
+name: Backend CI - dev
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - backend/**
+
+jobs:
+  test-before-merge:
+    env:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL_DEV: ${{ secrets.DB_URL_DEV }}
+      DB_NAME_DEV: ${{ secrets.DB_NAME_DEV }}
+      DB_USERNAME_DEV: ${{ secrets.DB_USERNAME_DEV }}
+      DB_PASSWORD_DEV: ${{ secrets.DB_PASSWORD_DEV }}
+      SERVER_DEV_JWT_SECRET_KEY: ${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}
+      CLIENT_LOCAL_PC_1: ${{ secrets.CLIENT_LOCAL_PC_1 }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: '체크아웃'
+        uses: actions/checkout@v4
+
+      - name: 'JDK 설정'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: 'Gradle 캐싱'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: 'Gradle 실행 권한 부여'
+        run: chmod +x ./gradlew
+        working-directory: backend
+
+      - name: '테스트 수행'
+        run: ./gradlew clean test
+        working-directory: backend
+
+      - name: '테스트 리포트 업로드'
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            backend/build/reports/tests/test
+            backend/build/test-results/test

@@ -19,3 +19,11 @@ spring:
     import: classpath:profiles/application-local.yml
     activate:
       on-profile: local
+
+---
+
+spring:
+  config:
+    import: classpath:profiles/application-dev.yml
+    activate:
+      on-profile: dev
