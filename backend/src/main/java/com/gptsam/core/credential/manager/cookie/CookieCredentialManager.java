@@ -1,7 +1,7 @@
 package com.gptsam.core.credential.manager.cookie;
 
 import com.gptsam.core.common.exception.type.biz.UnauthorizedException;
-import com.gptsam.core.credential.dto.Credential;
+import com.gptsam.core.credential.domain.Token;
 import com.gptsam.core.credential.manager.CredentialManager;
 import com.gptsam.core.credential.manager.cookie.properties.CookieCredentialProperties;
 import jakarta.servlet.http.Cookie;
@@ -28,8 +28,8 @@ public class CookieCredentialManager implements CredentialManager {
 	 * 인증 정보를 쿠키에 추가한다.
 	 */
 	@Override
-	public void setCredential(Credential credential, HttpServletResponse response) {
-		ResponseCookie cookie = createCookie(cookieCredentialProperties.maxAge(), credential.refreshToken());
+	public void setCredential(Token token, HttpServletResponse response) {
+		ResponseCookie cookie = createCookie(cookieCredentialProperties.maxAge(), token.getValue());
 		response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 	}
 
@@ -47,18 +47,18 @@ public class CookieCredentialManager implements CredentialManager {
 	 * 쿠키에 담긴 인증 정보를 얻는다.
 	 */
 	@Override
-	public String getCredential(HttpServletRequest request) {
+	public Token getCredential(HttpServletRequest request) {
 		Cookie cookie = findCredentialCookie(request);
 		if (cookie == null) {
 			throw new UnauthorizedException("쿠키에 인증 정보가 존재하지 않습니다.");
 		}
 
-		String credential = cookie.getValue();
-		if (credential == null || credential.isEmpty()) {
+		String token = cookie.getValue();
+		if (token == null || token.isEmpty()) {
 			throw new UnauthorizedException("쿠키의 인증 정보가 유효하지 않습니다.");
 		}
 
-		return credential;
+		return Token.of(token);
 	}
 
 	private Cookie findCredentialCookie(HttpServletRequest request) {

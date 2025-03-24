@@ -2,7 +2,7 @@ package com.gptsam.core.credential.manager.header;
 
 
 import com.gptsam.core.common.exception.type.biz.UnauthorizedException;
-import com.gptsam.core.credential.dto.Credential;
+import com.gptsam.core.credential.domain.Token;
 import com.gptsam.core.credential.manager.CredentialManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,15 +19,15 @@ public class HeaderCredentialManager implements CredentialManager {
 	 * 헤더에 인증 정보를 설정한다.
 	 */
 	@Override
-	public void setCredential(Credential credential, HttpServletResponse response) {
-		response.setHeader(HttpHeaders.AUTHORIZATION, AUTHORIZATION_TYPE + " " + credential.token());
+	public void setCredential(Token token, HttpServletResponse response) {
+		response.setHeader(HttpHeaders.AUTHORIZATION, AUTHORIZATION_TYPE + " " + token.getValue());
 	}
 
 	/**
 	 * 헤더에서 인증 정보를 불러온다.
 	 */
 	@Override
-	public String getCredential(HttpServletRequest request) {
+	public Token getCredential(HttpServletRequest request) {
 		if (!hasCredential(request)) {
 			throw new UnauthorizedException("헤더에 인증 정보가 존재하지 않습니다.");
 		}
@@ -37,7 +37,7 @@ public class HeaderCredentialManager implements CredentialManager {
 			throw new UnauthorizedException("헤더의 인증 정보가 잘못되었습니다.");
 		}
 
-		return authorization[1];
+		return Token.of(authorization[1]);
 	}
 
 	/**

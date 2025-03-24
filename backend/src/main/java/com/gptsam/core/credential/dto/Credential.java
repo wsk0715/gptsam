@@ -1,18 +1,20 @@
 package com.gptsam.core.credential.dto;
 
+import com.gptsam.core.credential.domain.Token;
+
 /**
  * 클라이언트 인증 정보를 담은 DTO
  */
 public record Credential(
-		String token,
-		String refreshToken
+		Token token,
+		Token refreshToken
 ) {
 
-	public static Credential of(String token) {
+	public static Credential of(Token token) {
 		return new Credential(token, null);
 	}
-
-	public static Credential of(String token, String refreshToken) {
+	
+	public static Credential of(Token token, Token refreshToken) {
 		return new Credential(token, refreshToken);
 	}
 

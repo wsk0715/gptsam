@@ -1,6 +1,6 @@
 package com.gptsam.core.credential.manager;
 
-import com.gptsam.core.credential.dto.Credential;
+import com.gptsam.core.credential.domain.Token;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -9,9 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public interface CredentialManager {
 
-	void setCredential(Credential credential, HttpServletResponse httpServletResponse);
+	void setCredential(Token token, HttpServletResponse httpServletResponse);
 
-	String getCredential(HttpServletRequest httpServletRequest);
+	Token getCredential(HttpServletRequest httpServletRequest);
 
 	boolean hasCredential(HttpServletRequest httpServletRequest);
 

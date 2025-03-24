@@ -1,7 +1,8 @@
 package com.gptsam.core.auth.resolver;
 
 import com.gptsam.core.auth.annotation.LoginUser;
-import com.gptsam.core.auth.service.AuthService;
+import com.gptsam.core.credential.domain.Token;
+import com.gptsam.core.credential.service.CredentialService;
 import com.gptsam.core.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-	private final AuthService authService;
+	private final CredentialService credentialService;
 
 
 	@Override
@@ -37,9 +38,12 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
 		// 요청이 보유한 토큰을 이용해 실제 존재하는 사용자인지 조회
-		String token = authService.getCredential(request);
+		Token token = credentialService.getCredential(request);
 		// TODO: 데이터베이스에 존재하는 사용자를 전달하도록 수정
-		User user = new User(authService.getUserIdFromToken(token), authService.getUserNicknameFromToken(token));
+		User user = new User(
+				credentialService.getUserIdFromToken(token),
+				credentialService.getUserNicknameFromToken(token)
+		);
 
 		log.info("사용자 id: {}", user.getId());
 
