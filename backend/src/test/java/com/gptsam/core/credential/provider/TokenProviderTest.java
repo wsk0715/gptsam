@@ -1,4 +1,4 @@
-package com.gptsam.core.credential;
+package com.gptsam.core.credential.provider;
 
 import com.gptsam.core.credential.provider.modules.AccessTokenProvider;
 import com.gptsam.core.credential.provider.modules.RefreshTokenProvider;

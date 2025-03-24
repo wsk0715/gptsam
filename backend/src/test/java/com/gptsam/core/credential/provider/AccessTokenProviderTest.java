@@ -1,4 +1,4 @@
-package com.gptsam.core.credential;
+package com.gptsam.core.credential.provider;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doNothing;
