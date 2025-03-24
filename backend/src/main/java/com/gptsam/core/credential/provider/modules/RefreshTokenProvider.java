@@ -30,7 +30,7 @@ public class RefreshTokenProvider {
 					.setSubject(String.valueOf(userId))
 					.setIssuedAt(now)
 					.setExpiration(expiryDate)
-					.signWith(SignatureAlgorithm.HS256, tokenProperties.jwtSecretKey().getBytes())
+					.signWith(SignatureAlgorithm.HS256, tokenProperties.secretKey().getBytes())
 					.compact()
 		);
 	}

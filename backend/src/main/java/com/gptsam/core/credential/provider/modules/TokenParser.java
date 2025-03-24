@@ -64,7 +64,7 @@ public class TokenParser {
 	public Claims getClaims(Token token) {
 		try {
 			return Jwts.parser()
-					   .setSigningKey(tokenProperties.jwtSecretKey().getBytes())
+					   .setSigningKey(tokenProperties.secretKey().getBytes())
 					   .parseClaimsJws(token.getValue())
 					   .getBody();
 		} catch (ExpiredJwtException e) {

@@ -33,7 +33,7 @@ public class AccessTokenProvider {
 					.claim("role", "USER")
 					.setIssuedAt(now)
 					.setExpiration(expiryDate)
-					.signWith(SignatureAlgorithm.HS256, tokenProperties.jwtSecretKey().getBytes())
+					.signWith(SignatureAlgorithm.HS256, tokenProperties.secretKey().getBytes())
 					.compact()
 		);
 	}
