@@ -10,14 +10,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-@EnableConfigurationProperties(TokenProperties.class)
 class TokenPropertiesTest {
 
 	@Nested
 	@DisplayName("로컬 환경 테스트")
+	@EnableConfigurationProperties(TokenProperties.class)
 	class TokenPropertiesTestLocal extends EnvLocal {
 
 		@Autowired
