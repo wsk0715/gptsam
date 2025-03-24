@@ -21,8 +21,8 @@ public class CredentialService {
 
 
 	public Credential setCredential(User user, HttpServletResponse response) {
-		Token accessToken = tokenProvider.generateToken(user);
-		Token refreshToken = tokenProvider.generateRefreshToken(user.getId());
+		Token accessToken = tokenProvider.getToken(user);
+		Token refreshToken = tokenProvider.getRefreshToken(user.getId());
 
 		// 토큰 설정
 		headerCredentialManager.setCredential(accessToken, response);
@@ -35,7 +35,7 @@ public class CredentialService {
 		Token refreshToken = cookieCredentialManager.getCredential(request);
 		refreshToken = tokenProvider.updateRefreshToken(refreshToken);
 		// 액세스토큰 갱신
-		Token accessToken = tokenProvider.refreshAccessToken(loginUser, refreshToken);
+		Token accessToken = tokenProvider.updateToken(loginUser, refreshToken);
 
 		// 토큰 설정
 		headerCredentialManager.setCredential(accessToken, response);
