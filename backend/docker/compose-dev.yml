@@ -1,0 +1,29 @@
+name: gptsam-dev
+services:
+  app:
+    build: ..
+    image: gptsam-app:v1
+    container_name: app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env.dev
+    volumes:
+      - /home/ubuntu/gptsam/backend/app/dev/logs:/app/dev/logs
+    ports:
+      - "8080:8080"
+
+  mysql:
+    image: mysql:8.4.4
+    container_name: mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_DEV}
+      MYSQL_DATABASE: ${DB_NAME_DEV}
+    ports:
+      - "23306:3306"
