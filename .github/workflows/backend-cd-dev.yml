@@ -15,11 +15,11 @@ jobs:
       - name: '체크아웃'
         uses: actions/checkout@v4
 
-      - name: '기존 .env 파일 제거'
-        run: sudo rm -f .env || true
+      - name: '.env 파일 초기화'
+        run: sudo truncate -s 0 .env.dev || sudo touch .env.dev
         working-directory: backend
       
-      - name: '.env 파일 생성'
+      - name: '.env 파일 내용 작성'
         run: |
           cat << EOF |sudo tee .env.dev
           SPRING_PROFILES_ACTIVE=dev
