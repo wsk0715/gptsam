@@ -24,5 +24,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_DEV}
       MYSQL_DATABASE: ${DB_NAME_DEV}
+      MYSQL_ROOT_HOST: "%"
     ports:
       - "23306:3306"
