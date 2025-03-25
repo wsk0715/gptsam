@@ -6,7 +6,7 @@ on:
       - "develop"
     paths:
       - "backend/**"
-      - "./github/workflows/backend-cd-dev.yml"
+      - ".github/workflows/backend-cd-dev.yml"
   workflow_dispatch:
 
 jobs:
