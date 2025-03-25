@@ -12,7 +12,7 @@ on:
 
 jobs:
   before-deploy:
-    runs-on: [self-hosted, ec2, dev]
+    runs-on: [self-hosted, oci, dev]
     steps:
       - name: '체크아웃'
         uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
           sudo chmod -R 777 /home/ubuntu/gptsam/backend/app/dev/logs
 
   pull-docker-and-deploy:
-    runs-on: [ self-hosted, ec2, dev]
+    runs-on: [ self-hosted, oci, dev]
     needs: before-deploy
     steps:
       - name: '체크아웃'
@@ -37,6 +37,7 @@ jobs:
           echo "DB_USERNAME_DEV=${{ secrets.DB_USERNAME_DEV }}" >> .env.dev
           echo "DB_PASSWORD_DEV=${{ secrets.DB_PASSWORD_DEV }}" >> .env.dev
           echo "SERVER_DEV_JWT_SECRET_KEY=${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}" >> .env.dev
+          echo "CLIENT_LOCAL_PC_1=${{ secrets.CLIENT_LOCAL_PC_1 }}" >> .env.dev
         working-directory: backend/docker
 
       - name: 'Docker 이미지 가져오기'

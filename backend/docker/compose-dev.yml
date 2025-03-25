@@ -18,11 +18,12 @@ services:
     container_name: mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 2s
-      timeout: 2s
+      interval: 5s
+      timeout: 5s
       retries: 10
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_DEV}
       MYSQL_DATABASE: ${DB_NAME_DEV}
+      MYSQL_ROOT_HOST: "%"
     ports:
       - "23306:3306"
