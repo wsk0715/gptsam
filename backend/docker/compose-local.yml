@@ -6,11 +6,8 @@ services:
     container_name: app
     depends_on:
       - mysql
-    environment:
-      SPRING_PROFILES_ACTIVE: local
-      DB_URL: ${DB_URL_LOCAL}
-      DB_USERNAME: ${DB_USERNAME_LOCAL}
-      DB_PASSWORD: ${DB_PASSWORD_LOCAL}
+    env_file:
+      - .env.local
     ports:
       - "8080:8080"
 
