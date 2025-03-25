@@ -1,8 +1,7 @@
 name: gptsam-dev
 services:
   app:
-    build: ..
-    image: gptsam-app:v1
+    image: ${DOCKERHUB_USERNAME}/gptsam-app:dev
     container_name: app
     depends_on:
       mysql:
