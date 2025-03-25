@@ -15,22 +15,21 @@ jobs:
       - name: '체크아웃'
         uses: actions/checkout@v4
 
-      - name: '.env 파일 초기화'
-        run: sudo truncate -s 0 .env.dev || sudo touch .env.dev
-        working-directory: backend
-      
-      - name: '.env 파일 내용 작성'
+      - name: '기존 .env 파일 제거 후 생성'
         run: |
-          cat << EOF |sudo tee .env.dev
-          SPRING_PROFILES_ACTIVE=dev
-          DB_URL_DEV=${{ secrets.DB_URL_DEV }}
-          DB_NAME_DEV=${{ secrets.DB_NAME_DEV }}
-          DB_USERNAME_DEV=${{ secrets.DB_USERNAME_DEV }}
-          DB_PASSWORD_DEV=${{ secrets.DB_PASSWORD_DEV }}
-          SERVER_DEV_JWT_SECRET_KEY=${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}
-          CLIENT_LOCAL_PC_1=${{ secrets.CLIENT_LOCAL_PC_1 }}
-          EOF
+          sudo rm -f .env.dev || true
+          touch .env.dev
           sudo chmod 644 .env.dev
+        working-directory: backend
+
+      - name: '.env 파일 작성'
+        run: |
+          echo "SPRING_PROFILES_ACTIVE=dev" >> .env.dev
+          echo "DB_URL_DEV=${{ secrets.DB_URL_DEV }}" >> .env.dev
+          echo "DB_NAME_DEV=${{ secrets.DB_NAME_DEV }}" >> .env.dev
+          echo "DB_USERNAME_DEV=${{ secrets.DB_USERNAME_DEV }}" >> .env.dev
+          echo "DB_PASSWORD_DEV=${{ secrets.DB_PASSWORD_DEV }}" >> .env.dev
+          echo "SERVER_DEV_JWT_SECRET_KEY=${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}" >> .env.dev
         working-directory: backend
 
       - name: '로그 디렉토리 생성'
@@ -47,8 +46,8 @@ jobs:
 
       - name: 'Docker 이미지 가져오기'
         run: |
-          sudo docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gptsam-app:dev
+          sudo docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_PASSWORD }}"
+          sudo docker pull "${{ secrets.DOCKERHUB_USERNAME }}"/gptsam-app:dev
 
       - name: '실행 중인 컨테이너 종료'
         run: |
