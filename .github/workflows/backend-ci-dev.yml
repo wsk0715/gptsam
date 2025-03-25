@@ -44,7 +44,7 @@ jobs:
         run: chmod +x ./gradlew
         working-directory: backend
 
-      - name: '테스트 & 빌드 수행'
+      - name: 'Gradle 테스트 & 빌드'
         run: ./gradlew clean build
         working-directory: backend
 
