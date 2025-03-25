@@ -6,11 +6,10 @@ services:
     container_name: app
     depends_on:
       - mysql
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      DB_URL: ${DB_URL_DEV}
-      DB_USERNAME: ${DB_USERNAME_DEV}
-      DB_PASSWORD: ${DB_PASSWORD_DEV}
+    env_file:
+      - .env.dev
+    volumes:
+      - /home/ubuntu/gptsam/backend/app/dev/logs:/app/dev/logs
     ports:
       - "8080:8080"
 
