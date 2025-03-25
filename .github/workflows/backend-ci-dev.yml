@@ -8,7 +8,7 @@ on:
       - backend/**
 
 jobs:
-  test-before-merge:
+  test-before-build:
     env:
       SPRING_PROFILES_ACTIVE: dev
       DB_URL_DEV: ${{ secrets.DB_URL_DEV }}
@@ -56,3 +56,21 @@ jobs:
           path: |
             backend/build/reports/tests/test
             backend/build/test-results/test
+
+  docker-build-and-push:
+    needs: test-before-build
+    if: success()
+    runs-on: [self-hosted, ec2, dev]
+    steps:
+      - name: '체크아웃'
+        uses: actions/checkout@v4
+
+      - name: 'Docker 이미지 빌드'
+        run: sudo docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/gptsam-app:dev .
+        working-directory: backend
+
+      - name: 'Docker 이미지 푸시'
+        run: |
+          sudo docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
+          sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/gptsam-app:dev
+        working-directory: backend
