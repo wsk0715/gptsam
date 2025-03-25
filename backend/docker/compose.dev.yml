@@ -1,0 +1,24 @@
+name: gptsam-dev
+services:
+  app:
+    build: ..
+    image: gptsam-app:v1
+    container_name: app
+    depends_on:
+      - mysql
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: ${DB_URL_DEV}
+      DB_USERNAME: ${DB_USERNAME_DEV}
+      DB_PASSWORD: ${DB_PASSWORD_DEV}
+    ports:
+      - "8080:8080"
+
+  mysql:
+    image: mysql:8.4.4
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_DEV}
+      MYSQL_DATABASE: ${DB_NAME_DEV}
+    ports:
+      - "23306:3306"

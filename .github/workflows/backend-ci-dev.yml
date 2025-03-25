@@ -8,7 +8,7 @@ on:
       - backend/**
 
 jobs:
-  test-before-merge:
+  build-app:
     env:
       SPRING_PROFILES_ACTIVE: dev
       DB_URL_DEV: ${{ secrets.DB_URL_DEV }}
@@ -44,9 +44,16 @@ jobs:
         run: chmod +x ./gradlew
         working-directory: backend
 
-      - name: '테스트 수행'
-        run: ./gradlew clean test
+      - name: 'Gradle 테스트 & 빌드'
+        run: ./gradlew clean build
         working-directory: backend
+
+      - name: 'Artifact 업로드'
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gptsam
+          path: backend/build/libs/*.jar
 
       - name: '테스트 리포트 업로드'
         if: always()
@@ -56,3 +63,27 @@ jobs:
           path: |
             backend/build/reports/tests/test
             backend/build/test-results/test
+
+  build-docker-and-push:
+    needs: build-app
+    if: success()
+    runs-on: [self-hosted, ec2, dev]
+    steps:
+      - name: '체크아웃'
+        uses: actions/checkout@v4
+
+      - name: 'Artifact 다운로드'
+        uses: actions/download-artifact@v4
+        with:
+          name: gptsam
+          path: backend/build/libs
+
+      - name: 'Docker 이미지 빌드'
+        run: sudo docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/gptsam-app:dev .
+        working-directory: backend
+
+      - name: 'Docker 이미지 푸시'
+        run: |
+          sudo docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
+          sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/gptsam-app:dev
+        working-directory: backend
