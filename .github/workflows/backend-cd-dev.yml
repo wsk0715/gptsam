@@ -12,7 +12,7 @@ on:
 
 jobs:
   before-deploy:
-    runs-on: [self-hosted, ec2, dev]
+    runs-on: [self-hosted, oci, dev]
     steps:
       - name: '체크아웃'
         uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
           sudo chmod -R 777 /home/ubuntu/gptsam/backend/app/dev/logs
 
   pull-docker-and-deploy:
-    runs-on: [ self-hosted, ec2, dev]
+    runs-on: [ self-hosted, oci, dev]
     needs: before-deploy
     steps:
       - name: '체크아웃'

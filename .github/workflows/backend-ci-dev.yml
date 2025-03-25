@@ -69,7 +69,7 @@ jobs:
   build-docker-and-push:
     needs: build-app
     if: success()
-    runs-on: [self-hosted, ec2, dev]
+    runs-on: [self-hosted, oci, dev]
     steps:
       - name: '체크아웃'
         uses: actions/checkout@v4
