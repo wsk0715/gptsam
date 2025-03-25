@@ -1,0 +1,63 @@
+name: Backend CD - dev
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - backend/**
+
+jobs:
+  before-deploy:
+    runs-on: [self-hosted, ec2, dev]
+    steps:
+      - name: '체크아웃'
+        uses: actions/checkout@v4
+
+      - name: '기존 .env 파일 제거'
+        run: sudo rm -f .env || true
+        working-directory: backend
+      
+      - name: '.env 파일 생성'
+        run: |
+          cat << EOF |sudo tee .env.dev
+          SPRING_PROFILES_ACTIVE=dev
+          DB_URL_DEV=${{ secrets.DB_URL_DEV }}
+          DB_NAME_DEV=${{ secrets.DB_NAME_DEV }}
+          DB_USERNAME_DEV=${{ secrets.DB_USERNAME_DEV }}
+          DB_PASSWORD_DEV=${{ secrets.DB_PASSWORD_DEV }}
+          SERVER_DEV_JWT_SECRET_KEY=${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}
+          CLIENT_LOCAL_PC_1=${{ secrets.CLIENT_LOCAL_PC_1 }}
+          EOF
+          sudo chmod 644 .env.dev
+        working-directory: backend
+
+      - name: '로그 디렉토리 생성'
+        run: |
+          sudo mkdir -p /home/ubuntu/gptsam/backend/app/dev/logs
+          sudo chmod -R 777 /home/ubuntu/gptsam/backend/app/dev/logs
+
+  pull-docker-and-deploy:
+    runs-on: [ self-hosted, ec2, dev]
+    needs: before-deploy
+    steps:
+      - name: '체크아웃'
+        uses: actions/checkout@v4
+
+      - name: 'Docker 이미지 가져오기'
+        run: |
+          sudo docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gptsam-app:dev
+
+      - name: '실행 중인 컨테이너 종료'
+        run: |
+          sudo docker stop gptsam-app-dev || true
+          sudo docker rm gptsam-app-dev || true
+
+      - name: '컨테이너 실행'
+        run: |
+          sudo docker-compose -f docker/compose-dev.yml --env-file ../.env.dev up -d
+        working-directory: backend
+
+      - name: '사용하지 않는 이미지 정리'
+        run: sudo docker image prune -af
