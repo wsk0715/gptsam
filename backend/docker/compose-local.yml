@@ -5,7 +5,8 @@ services:
     image: gptsam-app:v1
     container_name: app
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     env_file:
       - .env.local
     ports:
@@ -14,6 +15,11 @@ services:
   mysql:
     image: mysql:8.4.4
     container_name: mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 2s
+      timeout: 2s
+      retries: 10
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_LOCAL}
       MYSQL_DATABASE: ${DB_NAME_LOCAL}
