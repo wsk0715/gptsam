@@ -16,16 +16,6 @@ jobs:
       - name: '체크아웃'
         uses: actions/checkout@v4
 
-      - name: '.env 파일 작성'
-        run: |
-          echo "SPRING_PROFILES_ACTIVE=dev" > .env.dev
-          echo "DB_URL_DEV=${{ secrets.DB_URL_DEV }}" >> .env.dev
-          echo "DB_NAME_DEV=${{ secrets.DB_NAME_DEV }}" >> .env.dev
-          echo "DB_USERNAME_DEV=${{ secrets.DB_USERNAME_DEV }}" >> .env.dev
-          echo "DB_PASSWORD_DEV=${{ secrets.DB_PASSWORD_DEV }}" >> .env.dev
-          echo "SERVER_DEV_JWT_SECRET_KEY=${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}" >> .env.dev
-        working-directory: backend
-
       - name: '로그 디렉토리 생성'
         run: |
           sudo mkdir -p /home/ubuntu/gptsam/backend/app/dev/logs
@@ -37,6 +27,16 @@ jobs:
     steps:
       - name: '체크아웃'
         uses: actions/checkout@v4
+
+      - name: '.env 파일 작성'
+        run: |
+          echo "SPRING_PROFILES_ACTIVE=dev" > .env.dev
+          echo "DB_URL_DEV=${{ secrets.DB_URL_DEV }}" >> .env.dev
+          echo "DB_NAME_DEV=${{ secrets.DB_NAME_DEV }}" >> .env.dev
+          echo "DB_USERNAME_DEV=${{ secrets.DB_USERNAME_DEV }}" >> .env.dev
+          echo "DB_PASSWORD_DEV=${{ secrets.DB_PASSWORD_DEV }}" >> .env.dev
+          echo "SERVER_DEV_JWT_SECRET_KEY=${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}" >> .env.dev
+        working-directory: backend
 
       - name: 'Docker 이미지 가져오기'
         run: |
