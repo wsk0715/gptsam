@@ -15,20 +15,14 @@ jobs:
       - name: '체크아웃'
         uses: actions/checkout@v4
 
-      - name: '기존 .env 파일 초기화'
-        run: |
-          sudo truncate -s 0 .env.dev || sudo touch .env.dev
-          sudo chmod 644 .env.dev
-        working-directory: backend
-
       - name: '.env 파일 작성'
         run: |
-          sudo bash -c 'echo "SPRING_PROFILES_ACTIVE=dev" >> .env.dev'
-          sudo bash -c 'echo "DB_URL_DEV=${{ secrets.DB_URL_DEV }}" >> .env.dev'
-          sudo bash -c 'echo "DB_NAME_DEV=${{ secrets.DB_NAME_DEV }}" >> .env.dev'
-          sudo bash -c 'echo "DB_USERNAME_DEV=${{ secrets.DB_USERNAME_DEV }}" >> .env.dev'
-          sudo bash -c 'echo "DB_PASSWORD_DEV=${{ secrets.DB_PASSWORD_DEV }}" >> .env.dev'
-          sudo bash -c 'echo "SERVER_DEV_JWT_SECRET_KEY=${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}" >> .env.dev'
+          echo "SPRING_PROFILES_ACTIVE=dev" > .env.dev
+          echo "DB_URL_DEV=${{ secrets.DB_URL_DEV }}" >> .env.dev
+          echo "DB_NAME_DEV=${{ secrets.DB_NAME_DEV }}" >> .env.dev
+          echo "DB_USERNAME_DEV=${{ secrets.DB_USERNAME_DEV }}" >> .env.dev
+          echo "DB_PASSWORD_DEV=${{ secrets.DB_PASSWORD_DEV }}" >> .env.dev
+          echo "SERVER_DEV_JWT_SECRET_KEY=${{ secrets.SERVER_DEV_JWT_SECRET_KEY }}" >> .env.dev
         working-directory: backend
 
       - name: '로그 디렉토리 생성'
