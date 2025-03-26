@@ -3,5 +3,5 @@ interface MainProps {
 }
 
 export default function Main({ children }: MainProps) {
-	return <main>{children}</main>;
+	return <main className="flex-1 flex flex-col">{children}</main>;
 }
