@@ -24,12 +24,6 @@ export default function Footer() {
 		<footer className="bg-gray-800 text-white">
 			<FlexGrid cols={4}>
 				<Logo size={1.5} isLink={false} />
-				<></>
-				<></>
-				<></>
-			</FlexGrid>
-			<FlexGrid cols={4}>
-				<></>
 				<FooterSection title="Business" links={businessLinks} />
 				<FooterSection title="Customer Service" links={customerServiceLinks} />
 				<FooterSection title="Social Media" links={socialMediaLinks} />
