@@ -31,9 +31,5 @@ export default function Home() {
 	if (error) return <div>에러: {error}</div>;
 	if (!data) return <div>데이터가 없습니다</div>;
 
-	return (
-		<div>
-			<div>{data.timestamp}</div>
-		</div>
-	);
+	return <>{data.timestamp}</>;
 }
